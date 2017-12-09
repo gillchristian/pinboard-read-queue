@@ -1,18 +1,21 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { injectGlobal } from 'styled-components'
+import './main.css';
+import { Main } from './Main.elm';
+import registerServiceWorker from './registerServiceWorker';
 
-import App from './App'
+const QUEUE_KEY = "queue";
 
-injectGlobal`
-  body {
-    font-family: Helvetica;
-    margin: 0;
-    padding: 0;
+let app = Main.embed(document.getElementById('root'));
+
+app.ports.saveToStorage.subscribe(function(value) {
+  localStorage.setItem(QUEUE_KEY, JSON.stringify(value));
+});
+
+app.ports.doLoadFromStorage.subscribe(function() {
+  let data = localStorage.getItem(QUEUE_KEY)
+  if (data) {
+    data = JSON.parse(data)
   }
+  app.ports.loadFromStorage.send(data);
+});
 
-  body * {
-    box-sizing: border-box;
-  }
-`
-render(<App />, document.getElementById('root'))
+registerServiceWorker();
