@@ -129,13 +129,13 @@ addItem model =
         isValid =
             not <| isJust error
     in
-    if isValid then
-        { queue = model.queue ++ [ model.newItem ]
-        , newItem = Item "" ""
-        , error = error
-        }
-    else
-        { model | error = error }
+        if isValid then
+            { queue = model.queue ++ [ model.newItem ]
+            , newItem = Item "" ""
+            , error = error
+            }
+        else
+            { model | error = error }
 
 
 
@@ -219,16 +219,15 @@ validateItem { href, text } =
         textIsValid =
             text /= ""
     in
-    if not urlIsValid then
-        Just "href has to be a valid URL"
-    else if not textIsValid then
-        Just "text cant be empty"
-    else
-        Nothing
+        if not urlIsValid then
+            Just "href has to be a valid URL"
+        else if not textIsValid then
+            Just "text cant be empty"
+        else
+            Nothing
 
 
 sendCmd : msg -> Cmd msg
 sendCmd msg =
     Task.succeed msg
         |> Task.perform identity
-
