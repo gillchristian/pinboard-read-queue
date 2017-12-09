@@ -1,6 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "read queue",
+    "homepage" : "http://gillchristian.github.io/pinboard-read-queue",
     "repository": "https://github.com/gillchristian/pinboard-read-queue.git",
     "license": "MIT",
     "source-directories": [
