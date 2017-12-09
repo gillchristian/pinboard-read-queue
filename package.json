@@ -1,0 +1,17 @@
+{
+  "name": "read-queue",
+  "version": "0.0.1",
+  "description": "read queue",
+  "main": "index.js",
+  "repository": "git@github.com:gillchristian/pinboard-read-queue.git",
+  "author": "gillchristian <gillchristiang@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "create-elm-app": "^1.10.0",
+    "elm": "^0.18.0"
+  },
+  "scripts": {
+    "build": "elm-app build && mv build docs",
+    "dev": "elm-app start"
+  }
+}
