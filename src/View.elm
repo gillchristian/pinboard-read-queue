@@ -18,15 +18,17 @@ view { newItem, queue, error } =
     div [ class "read-queue--app" ]
         [ hero
         , div [ class "read-queue--main container" ]
-            [ div [ class "tile is-ancestor" ]
-                [ div [ class "tile is-vertical is-parent" ]
-                    [ div [ class "tile is-child box" ]
-                        [ newItemForm newItem error
+            [ section [ class "section" ]
+                [ div [ class "tile is-ancestor" ]
+                    [ div [ class "tile is-vertical is-parent" ]
+                        [ div [ class "tile is-child box" ]
+                            [ newItemForm newItem error
+                            ]
                         ]
-                    ]
-                , div [ class "tile is-parent" ]
-                    [ div [ class "tile is-child box" ]
-                        [ itemView queue
+                    , div [ class "tile is-parent" ]
+                        [ div [ class "tile is-child box" ]
+                            [ itemView queue
+                            ]
                         ]
                     ]
                 ]
@@ -96,13 +98,16 @@ itemView queue =
     case List.head queue of
         Just item ->
             div []
-                [ a [ href item.href, target "_blank" ] [ text item.text ]
-                , button [ onClick ClearFirstItem, class "button" ] [ text "X" ]
+                [ h2 [ class "subtitle" ] [ text "Your next item is:" ]
+                , div [ class "is-flex", style [ ( "align-items", "center" ) ] ]
+                    [ a [ class "button is-text", href item.href, target "_blank" ] [ text item.text ]
+                    , button [ onClick ClearFirstItem, class "delete" ] [ text "X" ]
+                    ]
                 ]
 
         Nothing ->
             div []
-                [ text "Try adding some items to read :D"
+                [ h2 [ class "subtitle" ] [ text "Try adding some items to read!" ]
                 ]
 
 
