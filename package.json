@@ -17,5 +17,8 @@
   "scripts": {
     "build": "rm -fr docs ; elm-app build ; mv build docs",
     "dev": "elm-app start"
+  },
+  "dependencies": {
+    "bulma": "^0.6.1"
   }
 }

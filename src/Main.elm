@@ -6,7 +6,7 @@ import Html exposing (program)
 -- local modules
 
 import Msgs exposing (Msg)
-import Model exposing (Item, Queue, Model)
+import Model exposing (Item, ItemValidation, Queue, Model)
 import View exposing (view)
 import Update exposing (update)
 import Subscriptions exposing (subscriptions, doLoadFromStorage)
@@ -28,7 +28,7 @@ model : Model
 model =
     { newItem = Item "" ""
     , queue = []
-    , error = Nothing
+    , error = ItemValidation Nothing Nothing
     }
 
 

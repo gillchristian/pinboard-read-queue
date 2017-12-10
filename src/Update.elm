@@ -1,8 +1,8 @@
 port module Update exposing (update)
 
 import Msgs exposing (Msg(..))
-import Model exposing (Item, Queue, Model)
-import Utils exposing (updateItemHref, updateItemText, sendCmd, isJust, validateItem)
+import Model exposing (Item, ItemValidation, Queue, Model)
+import Utils exposing (updateItemHref, updateItemText, sendCmd, isNothing, validateItemHref, validateItemText)
 import Subscriptions exposing (saveToStorage, doLoadFromStorage)
 
 
@@ -44,16 +44,19 @@ handleLoad model maybeQueue =
 addItem : Model -> Model
 addItem model =
     let
-        error =
-            validateItem model.newItem
+        textError =
+            validateItemText model.newItem
+
+        hrefError =
+            validateItemHref model.newItem
 
         isValid =
-            not <| isJust error
+            isNothing textError && isNothing hrefError
     in
         if isValid then
             { queue = model.queue ++ [ model.newItem ]
             , newItem = Item "" ""
-            , error = error
+            , error = ItemValidation Nothing Nothing
             }
         else
-            { model | error = error }
+            { model | error = { text = textError, href = hrefError } }

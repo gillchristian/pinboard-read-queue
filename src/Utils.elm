@@ -9,14 +9,14 @@ import Task as Task
 import Model exposing (Item)
 
 
-isJust : Maybe a -> Bool
-isJust maybe =
+isNothing : Maybe a -> Bool
+isNothing maybe =
     case maybe of
         Just _ ->
-            True
+            False
 
         Nothing ->
-            False
+            True
 
 
 updateItemText : String -> Item -> Item
@@ -34,21 +34,22 @@ urlRgx =
     regex "^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$"
 
 
-validateItem : Item -> Maybe String
-validateItem { href, text } =
-    let
-        urlIsValid =
-            contains urlRgx href
+validateItemHref : Item -> Maybe String
+validateItemHref { href } =
+    if href == "" then
+        Just "Link can't be empty"
+    else if not <| contains urlRgx href then
+        Just "Link has to be a valid URL"
+    else
+        Nothing
 
-        textIsValid =
-            text /= ""
-    in
-        if not urlIsValid then
-            Just "href has to be a valid URL"
-        else if not textIsValid then
-            Just "text cant be empty"
-        else
-            Nothing
+
+validateItemText : Item -> Maybe String
+validateItemText { text } =
+    if text /= "" then
+        Nothing
+    else
+        Just "Link text can't be empty"
 
 
 sendCmd : msg -> Cmd msg

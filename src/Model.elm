@@ -1,9 +1,15 @@
-module Model exposing (Item, Queue, Model)
+module Model exposing (Item, ItemValidation, Queue, Model)
 
 
 type alias Item =
     { text : String
     , href : String
+    }
+
+
+type alias ItemValidation =
+    { text : Maybe String
+    , href : Maybe String
     }
 
 
@@ -14,5 +20,5 @@ type alias Queue =
 type alias Model =
     { newItem : Item
     , queue : Queue
-    , error : Maybe String
+    , error : ItemValidation
     }
