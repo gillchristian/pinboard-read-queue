@@ -1,12 +1,18 @@
 module Utils exposing (..)
 
-import Regex exposing (Regex, regex, contains)
+import Regex exposing (Regex, regex, contains, replace, HowMany(All), Match)
 import Task as Task
 
 
 -- local modules
 
 import Model exposing (Item)
+
+
+sendCmd : msg -> Cmd msg
+sendCmd msg =
+    Task.succeed msg
+        |> Task.perform identity
 
 
 isNothing : Maybe a -> Bool
@@ -29,9 +35,22 @@ updateItemHref href item =
     { item | href = href }
 
 
+validateItemText : Item -> Maybe String
+validateItemText { text } =
+    if contains (regex "^\\s+$") text then
+        Just "Link text can't be only spaces"
+    else
+        Nothing
+
+
 urlRgx : Regex
 urlRgx =
-    regex "^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$"
+    regex "([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$"
+
+
+httpsRgx : Regex
+httpsRgx =
+    regex "^https?:\\/\\/"
 
 
 validateItemHref : Item -> Maybe String
@@ -44,15 +63,47 @@ validateItemHref { href } =
         Nothing
 
 
-validateItemText : Item -> Maybe String
-validateItemText { text } =
-    if text /= "" then
-        Nothing
+addHttp : String -> String
+addHttp link =
+    if contains httpsRgx link then
+        link
     else
-        Just "Link text can't be empty"
+        "http://" ++ link
 
 
-sendCmd : msg -> Cmd msg
-sendCmd msg =
-    Task.succeed msg
-        |> Task.perform identity
+removeMatch : Regex -> String -> String
+removeMatch regex =
+    replace All regex (\_ -> "")
+
+
+removeProtocol : String -> String
+removeProtocol =
+    removeMatch httpsRgx
+
+
+removeWWW : String -> String
+removeWWW =
+    removeMatch (regex "^www\\.")
+
+
+removeQuery : String -> String
+removeQuery =
+    removeMatch (regex "\\\\?(?=\\?).*")
+
+
+removeTrailingSlash : String -> String
+removeTrailingSlash =
+    removeMatch (regex "\\/$")
+
+
+truncate : Int -> String -> String
+truncate max str =
+    if String.length str >= max then
+        (String.slice 0 (max - 3) str) ++ "..."
+    else
+        str
+
+
+cleanLink : String -> String
+cleanLink link =
+    truncate 30 <| removeProtocol <| removeWWW <| removeQuery <| removeTrailingSlash link

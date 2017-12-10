@@ -2,8 +2,18 @@ module Update exposing (update)
 
 import Msgs exposing (Msg(..))
 import Model exposing (Item, ItemValidation, Queue, Model)
-import Utils exposing (updateItemHref, updateItemText, sendCmd, isNothing, validateItemHref, validateItemText)
 import Subscriptions exposing (saveToStorage, doLoadFromStorage)
+import Utils
+    exposing
+        ( updateItemHref
+        , updateItemText
+        , sendCmd
+        , isNothing
+        , validateItemHref
+        , validateItemText
+        , addHttp
+        , cleanLink
+        )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -52,9 +62,18 @@ addItem model =
 
         isValid =
             isNothing textError && isNothing hrefError
+
+        text =
+            if model.newItem.text == "" then
+                cleanLink model.newItem.href
+            else
+                model.newItem.text
+
+        href =
+            addHttp model.newItem.href
     in
         if isValid then
-            { queue = model.queue ++ [ model.newItem ]
+            { queue = model.queue ++ [ { text = text, href = href } ]
             , newItem = Item "" ""
             , error = ItemValidation Nothing Nothing
             }
