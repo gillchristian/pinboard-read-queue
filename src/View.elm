@@ -9,16 +9,80 @@ import Json.Decode exposing (succeed)
 -- local modules
 
 import Utils exposing (isNothing)
-import Model exposing (Item, ItemValidation, Queue, Model)
+import Model exposing (Item, ItemValidation, Queue, Model, Route(..))
 import Msgs exposing (Msg(AddItem, UpdateHref, UpdateText, ClearFirstItem))
+import Routing
+    exposing
+        ( homePath
+        , aboutPath
+        , settingsPath
+        , pinboardPath
+        , pocketPath
+        )
 
 
 view : Model -> Html Msg
 view model =
-    div [ class "read-queue--app" ]
-        [ pageHero
-        , pageMain model
-        , pageFooter
+    let
+        page =
+            case model.route of
+                HomeRoute ->
+                    pageMain model
+
+                AboutRoute ->
+                    viewAbout
+
+                SettingsRoute ->
+                    viewSettings
+
+                PinboardRoute ->
+                    viewPinboard
+
+                PocketRoute ->
+                    viewPocket
+
+                NotFoundRoute ->
+                    viewNotFount
+    in
+        div [ class "read-queue--app" ]
+            [ pageHero
+            , page
+            , pageFooter
+            ]
+
+
+viewNotFount : Html Msg
+viewNotFount =
+    div [ class "read-queue--main container" ]
+        [ h2 [ class "subtitle" ] [ text "404 Not Found" ]
+        ]
+
+
+viewAbout : Html Msg
+viewAbout =
+    div [ class "read-queue--main container" ]
+        [ h2 [ class "subtitle" ] [ text "About" ]
+        ]
+
+
+viewSettings : Html Msg
+viewSettings =
+    div [ class "read-queue--main container" ]
+        [ h2 [ class "subtitle" ] [ text "Settings" ]
+        ]
+
+
+viewPinboard : Html Msg
+viewPinboard =
+    div [ class "read-queue--main container" ]
+        [ h2 [ class "subtitle" ] [ text "Pinboard queue" ]
+        ]
+
+
+viewPocket : Html Msg
+viewPocket =
+    div [ class "read-queue--main container" ]
+        [ h2 [ class "subtitle" ] [ text "Pocket queue" ]
         ]
 
 
@@ -123,15 +187,15 @@ pageHero =
             [ nav [ class "navbar" ]
                 [ div [ class "container" ]
                     [ div [ class "navbar-brand" ]
-                        [ h1 [ class "navbar-item title" ] [ text "Read queue" ]
+                        [ a [ href homePath ] [ h1 [ class "navbar-item title" ] [ text "Read queue" ] ]
                         ]
                     , div [ class "navbar-menu" ]
                         [ div [ class "navbar-end" ]
-                            [ a [ class "navbar-item is-active" ]
+                            [ a [ class "navbar-item is-active", href homePath ]
                                 [ text "Home" ]
-                            , a [ class "navbar-item" ]
+                            , a [ class "navbar-item", href aboutPath ]
                                 [ text "About" ]
-                            , a [ class "navbar-item" ]
+                            , a [ class "navbar-item", href settingsPath ]
                                 [ text "Settings" ]
                             ]
                         ]
@@ -149,19 +213,19 @@ pageHero =
                 [ div [ class "container" ]
                     [ ul []
                         [ li [ class "is-active" ]
-                            [ a []
+                            [ a [ href homePath ]
                                 [ span [ class "icon is-small" ] [ i [ class "far fa-hand-point-down" ] [] ]
                                 , span [] [ text "Local" ]
                                 ]
                             ]
                         , li []
-                            [ a []
+                            [ a [ href pinboardPath ]
                                 [ span [ class "icon is-small" ] [ i [ class "fa fa-thumbtack" ] [] ]
                                 , span [] [ text "Pinboard" ]
                                 ]
                             ]
                         , li []
-                            [ a []
+                            [ a [ href pocketPath ]
                                 [ span [ class "icon is-small" ] [ i [ class "fab fa-get-pocket" ] [] ]
                                 , span [] [ text "Pocket" ]
                                 ]

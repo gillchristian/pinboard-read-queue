@@ -1,8 +1,9 @@
 module Update exposing (update)
 
 import Msgs exposing (Msg(..))
-import Model exposing (Item, ItemValidation, Queue, Model)
+import Model exposing (Item, ItemValidation, Queue, Model, Route(..))
 import Subscriptions exposing (saveToStorage, doLoadFromStorage)
+import Routing exposing (parseLocation)
 import Utils
     exposing
         ( updateItemHref
@@ -40,6 +41,13 @@ update msg model =
         DoLoadFromStorage ->
             ( model, doLoadFromStorage () )
 
+        OnLocationChange location ->
+            let
+                newRoute =
+                    parseLocation location
+            in
+                ( { model | route = newRoute }, Cmd.none )
+
 
 handleLoad : Model -> Maybe Queue -> Model
 handleLoad model maybeQueue =
@@ -76,6 +84,7 @@ addItem model =
             { queue = model.queue ++ [ { text = text, href = href } ]
             , newItem = Item "" ""
             , error = ItemValidation Nothing Nothing
+            , route = HomeRoute
             }
         else
             { model | error = { text = textError, href = hrefError } }

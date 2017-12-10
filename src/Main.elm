@@ -1,14 +1,15 @@
 module Main exposing (..)
 
-import Html exposing (program)
+import Navigation exposing (Location, program)
 
 
 -- local modules
 
-import Msgs exposing (Msg)
-import Model exposing (Item, ItemValidation, Queue, Model)
+import Msgs exposing (Msg(OnLocationChange))
+import Model exposing (Item, ItemValidation, Queue, Model, Route(..))
 import View exposing (view)
 import Update exposing (update)
+import Routing exposing (parseLocation)
 import Subscriptions exposing (subscriptions, doLoadFromStorage)
 
 
@@ -16,7 +17,7 @@ import Subscriptions exposing (subscriptions, doLoadFromStorage)
 
 
 main =
-    program
+    program OnLocationChange
         { init = init
         , view = view
         , update = update
@@ -24,14 +25,19 @@ main =
         }
 
 
-model : Model
-model =
+model : Route -> Model
+model route =
     { newItem = Item "" ""
     , queue = []
     , error = ItemValidation Nothing Nothing
+    , route = route
     }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( model, doLoadFromStorage () )
+init : Location -> ( Model, Cmd Msg )
+init location =
+    let
+        currentRoute =
+            parseLocation location
+    in
+        ( model currentRoute, doLoadFromStorage () )

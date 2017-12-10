@@ -1,6 +1,6 @@
 module Utils exposing (..)
 
-import Regex exposing (Regex, regex, contains, replace, HowMany(All), Match)
+import Regex exposing (Regex, HowMany(All), Match, regex, contains, replace)
 import Task as Task
 
 

@@ -1,6 +1,7 @@
 module Msgs exposing (Msg(..))
 
 import Model exposing (Queue)
+import Navigation exposing (Location)
 
 
 type Msg
@@ -11,3 +12,4 @@ type Msg
     | LoadFromStorage (Maybe Queue)
     | SaveToStorage
     | DoLoadFromStorage
+    | OnLocationChange Location

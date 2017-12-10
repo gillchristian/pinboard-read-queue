@@ -1,4 +1,13 @@
-module Model exposing (Item, ItemValidation, Queue, Model)
+module Model exposing (Item, ItemValidation, Queue, Model, Route(..))
+
+
+type Route
+    = HomeRoute
+    | AboutRoute
+    | SettingsRoute
+    | PinboardRoute
+    | PocketRoute
+    | NotFoundRoute
 
 
 type alias Item =
@@ -21,4 +30,5 @@ type alias Model =
     { newItem : Item
     , queue : Queue
     , error : ItemValidation
+    , route : Route
     }
