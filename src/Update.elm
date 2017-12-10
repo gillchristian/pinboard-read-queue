@@ -1,4 +1,4 @@
-port module Update exposing (update)
+module Update exposing (update)
 
 import Msgs exposing (Msg(..))
 import Model exposing (Item, ItemValidation, Queue, Model)
