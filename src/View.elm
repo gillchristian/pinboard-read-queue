@@ -14,26 +14,31 @@ import Msgs exposing (Msg(AddItem, UpdateHref, UpdateText, ClearFirstItem))
 
 
 view : Model -> Html Msg
-view { newItem, queue, error } =
+view model =
     div [ class "read-queue--app" ]
-        [ hero
-        , div [ class "read-queue--main container" ]
-            [ section [ class "section" ]
-                [ div [ class "tile is-ancestor" ]
-                    [ div [ class "tile is-vertical is-parent" ]
-                        [ div [ class "tile is-child box" ]
-                            [ newItemForm newItem error
-                            ]
+        [ pageHero
+        , pageMain model
+        , pageFooter
+        ]
+
+
+pageMain : Model -> Html Msg
+pageMain { newItem, queue, error } =
+    div [ class "read-queue--main container" ]
+        [ section [ class "section" ]
+            [ div [ class "tile is-ancestor" ]
+                [ div [ class "tile is-parent" ]
+                    [ div [ class "tile is-child box" ]
+                        [ newItemForm newItem error
                         ]
-                    , div [ class "tile is-parent" ]
-                        [ div [ class "tile is-child box" ]
-                            [ itemView queue
-                            ]
+                    ]
+                , div [ class "tile is-parent" ]
+                    [ div [ class "tile is-child box" ]
+                        [ itemView queue
                         ]
                     ]
                 ]
             ]
-        , pageFooter
         ]
 
 
@@ -107,16 +112,62 @@ itemView queue =
 
         Nothing ->
             div []
-                [ h2 [ class "subtitle" ] [ text "Try adding some items to read!" ]
+                [ h2 [ class "subtitle" ] [ text "Your reading queue is empty!" ]
                 ]
 
 
-hero : Html Msg
-hero =
+pageHero : Html Msg
+pageHero =
     section [ class "read-queue--hero hero is-primary is-bold" ]
-        [ div [ class "hero-body" ]
-            [ div [ class "container" ]
-                [ h1 [ class "title" ] [ text "Read queue" ]
+        [ div [ class "hero-head" ]
+            [ nav [ class "navbar" ]
+                [ div [ class "container" ]
+                    [ div [ class "navbar-brand" ]
+                        [ h1 [ class "navbar-item title" ] [ text "Read queue" ]
+                        ]
+                    , div [ class "navbar-menu" ]
+                        [ div [ class "navbar-end" ]
+                            [ a [ class "navbar-item is-active" ]
+                                [ text "Home" ]
+                            , a [ class "navbar-item" ]
+                                [ text "About" ]
+                            , a [ class "navbar-item" ]
+                                [ text "Settings" ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        , div [ class "hero-body" ]
+            [ div [ class "container has-text-centered" ]
+                [ h2 [ class "subtitle" ]
+                    [ text "Your reading queue" ]
+                ]
+            ]
+        , div [ class "hero-foot" ]
+            [ nav [ class "tabs is-centered is-medium is-boxed" ]
+                [ div [ class "container" ]
+                    [ ul []
+                        [ li [ class "is-active" ]
+                            [ a []
+                                [ span [ class "icon is-small" ] [ i [ class "far fa-hand-point-down" ] [] ]
+                                , span [] [ text "Local" ]
+                                ]
+                            ]
+                        , li []
+                            [ a []
+                                [ span [ class "icon is-small" ] [ i [ class "fa fa-thumbtack" ] [] ]
+                                , span [] [ text "Pinboard" ]
+                                ]
+                            ]
+                        , li []
+                            [ a []
+                                [ span [ class "icon is-small" ] [ i [ class "fab fa-get-pocket" ] [] ]
+                                , span [] [ text "Pocket" ]
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]
