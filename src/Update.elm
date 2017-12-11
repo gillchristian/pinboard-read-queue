@@ -1,6 +1,7 @@
 module Update exposing (update)
 
 import Msgs exposing (Msg(..))
+import Navigation exposing (newUrl)
 import Model exposing (Item, ItemValidation, Queue, Model, Route(..))
 import Subscriptions exposing (saveToStorage, doLoadFromStorage)
 import Routing exposing (parseLocation)
@@ -40,6 +41,9 @@ update msg model =
 
         DoLoadFromStorage ->
             ( model, doLoadFromStorage () )
+
+        ChangeLocation path ->
+            ( model, newUrl path )
 
         OnLocationChange location ->
             let

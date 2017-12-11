@@ -12,4 +12,5 @@ type Msg
     | LoadFromStorage (Maybe Queue)
     | SaveToStorage
     | DoLoadFromStorage
+    | ChangeLocation String
     | OnLocationChange Location

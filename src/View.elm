@@ -10,14 +10,15 @@ import Json.Decode exposing (succeed)
 
 import Utils exposing (isNothing)
 import Model exposing (Item, ItemValidation, Queue, Model, Route(..))
-import Msgs exposing (Msg(AddItem, UpdateHref, UpdateText, ClearFirstItem))
+import Msgs exposing (Msg(AddItem, UpdateHref, UpdateText, ClearFirstItem, ChangeLocation))
 import Routing
     exposing
-        ( homePath
-        , aboutPath
-        , settingsPath
-        , pinboardPath
-        , pocketPath
+        ( onLinkClick
+        , toHome
+        , toAbout
+        , toSettings
+        , toPocketQueue
+        , toPinboardQueue
         )
 
 
@@ -201,15 +202,15 @@ pageHero =
             [ nav [ class "navbar" ]
                 [ div [ class "container" ]
                     [ div [ class "navbar-brand" ]
-                        [ a [ href homePath ] [ h1 [ class "navbar-item title" ] [ text "Read queue" ] ]
+                        [ toHome [] [ h1 [ class "navbar-item title" ] [ text "Read queue" ] ]
                         ]
                     , div [ class "navbar-menu" ]
                         [ div [ class "navbar-end" ]
-                            [ a [ class "navbar-item is-active", href homePath ]
+                            [ toHome [ class "navbar-item is-active" ]
                                 [ text "Home" ]
-                            , a [ class "navbar-item", href aboutPath ]
+                            , toAbout [ class "navbar-item" ]
                                 [ text "About" ]
-                            , a [ class "navbar-item", href settingsPath ]
+                            , toSettings [ class "navbar-item" ]
                                 [ text "Settings" ]
                             ]
                         ]
@@ -227,19 +228,19 @@ pageHero =
                 [ div [ class "container" ]
                     [ ul []
                         [ li [ class "is-active" ]
-                            [ a [ href homePath ]
+                            [ toHome []
                                 [ span [ class "icon is-small" ] [ i [ class "far fa-hand-point-down" ] [] ]
                                 , span [] [ text "Local" ]
                                 ]
                             ]
                         , li []
-                            [ a [ href pinboardPath ]
+                            [ toPinboardQueue []
                                 [ span [ class "icon is-small" ] [ i [ class "fa fa-thumbtack" ] [] ]
                                 , span [] [ text "Pinboard" ]
                                 ]
                             ]
                         , li []
-                            [ a [ href pocketPath ]
+                            [ toPocketQueue []
                                 [ span [ class "icon is-small" ] [ i [ class "fab fa-get-pocket" ] [] ]
                                 , span [] [ text "Pocket" ]
                                 ]
