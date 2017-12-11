@@ -11,7 +11,16 @@ module Routing
 
 import Navigation exposing (Location)
 import Model exposing (Route(..))
-import UrlParser exposing (..)
+import UrlParser
+    exposing
+        ( Parser
+        , oneOf
+        , parseHash
+        , top
+        , map
+        , s
+        , (</>)
+        )
 
 
 matchers : Parser (Route -> a) a
@@ -20,8 +29,8 @@ matchers =
         [ map HomeRoute top
         , map AboutRoute (s "about")
         , map SettingsRoute (s "settings")
-        , map PinboardRoute (s "pinboard")
-        , map PocketRoute (s "pocket")
+        , map PinboardRoute (s "queue" </> s "pinboard")
+        , map PocketRoute (s "queue" </> s "pocket")
         ]
 
 
@@ -52,9 +61,9 @@ settingsPath =
 
 pinboardPath : String
 pinboardPath =
-    "#pinboard"
+    "#queue/pinboard"
 
 
 pocketPath : String
 pocketPath =
-    "#pocket"
+    "#queue/pocket"

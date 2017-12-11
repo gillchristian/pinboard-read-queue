@@ -54,35 +54,49 @@ view model =
 viewNotFount : Html Msg
 viewNotFount =
     div [ class "read-queue--main container" ]
-        [ h2 [ class "subtitle" ] [ text "404 Not Found" ]
+        [ section [ class "section" ]
+            [ h2 [ class "subtitle" ] [ text "404 Not Found" ]
+            ]
         ]
 
 
 viewAbout : Html Msg
 viewAbout =
     div [ class "read-queue--main container" ]
-        [ h2 [ class "subtitle" ] [ text "About" ]
+        [ section [ class "section" ]
+            [ h2 [ class "subtitle" ] [ text "About" ]
+            , p [] [ text "Coming soon!" ]
+            ]
         ]
 
 
 viewSettings : Html Msg
 viewSettings =
     div [ class "read-queue--main container" ]
-        [ h2 [ class "subtitle" ] [ text "Settings" ]
+        [ section [ class "section" ]
+            [ h2 [ class "subtitle" ] [ text "Settings" ]
+            , p [] [ text "Coming soon!" ]
+            ]
         ]
 
 
 viewPinboard : Html Msg
 viewPinboard =
     div [ class "read-queue--main container" ]
-        [ h2 [ class "subtitle" ] [ text "Pinboard queue" ]
+        [ section [ class "section" ]
+            [ h2 [ class "subtitle" ] [ text "Pinboard queue" ]
+            , p [] [ text "Coming soon!" ]
+            ]
         ]
 
 
 viewPocket : Html Msg
 viewPocket =
     div [ class "read-queue--main container" ]
-        [ h2 [ class "subtitle" ] [ text "Pocket queue" ]
+        [ section [ class "section" ]
+            [ h2 [ class "subtitle" ] [ text "Pocket queue" ]
+            , p [] [ text "Coming soon!" ]
+            ]
         ]
 
 
