@@ -27,7 +27,6 @@ import UrlParser
         ( Parser
         , oneOf
         , parsePath
-        , top
         , map
         , s
         , (</>)
@@ -39,14 +38,20 @@ import UrlParser
 import Msgs exposing (Msg(ChangeLocation))
 
 
+{-
+   TODO: change HomeRoute to UrlParser.top and remove s baseUrl
+         when hosting in a root domain
+-}
+
+
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ map HomeRoute top
-        , map AboutRoute (s "about")
-        , map SettingsRoute (s "settings")
-        , map PinboardRoute (s "queue" </> s "pinboard")
-        , map PocketRoute (s "queue" </> s "pocket")
+        [ map HomeRoute (s baseUrl)
+        , map AboutRoute (s baseUrl </> s "about")
+        , map SettingsRoute (s baseUrl </> s "settings")
+        , map PinboardRoute (s baseUrl </> s "queue" </> s "pinboard")
+        , map PocketRoute (s baseUrl </> s "queue" </> s "pocket")
         ]
 
 
@@ -60,9 +65,13 @@ parseLocation location =
             NotFoundRoute
 
 
-{-| This prevent the reload when clicking on internal links
-@link: <https://github.com/sporto/elm-navigation-pushstate-example>
+
+{-
+   This prevents the reload when clicking on internal links
+   @link: <https://github.com/sporto/elm-navigation-pushstate-example>
 -}
+
+
 onLinkClick : msg -> Attribute msg
 onLinkClick message =
     let
@@ -79,9 +88,18 @@ link path attributes children =
     a ([ href path, onLinkClick (ChangeLocation path) ] ++ attributes) children
 
 
+
+{- TODO: remove when hosting in a root domain -}
+
+
+baseUrl : String
+baseUrl =
+    "pinboard-read-queue"
+
+
 homePath : String
 homePath =
-    "/"
+    "/" ++ baseUrl ++ "/"
 
 
 toHome : List (Attribute Msg) -> List (Html Msg) -> Html Msg
@@ -91,7 +109,7 @@ toHome =
 
 aboutPath : String
 aboutPath =
-    "/about"
+    "/" ++ baseUrl ++ "/about"
 
 
 toAbout : List (Attribute Msg) -> List (Html Msg) -> Html Msg
@@ -101,7 +119,7 @@ toAbout =
 
 settingsPath : String
 settingsPath =
-    "/settings"
+    "/" ++ baseUrl ++ "/settings"
 
 
 toSettings : List (Attribute Msg) -> List (Html Msg) -> Html Msg
@@ -111,7 +129,7 @@ toSettings =
 
 pinboardPath : String
 pinboardPath =
-    "/queue/pinboard"
+    "/" ++ baseUrl ++ "/queue/pinboard"
 
 
 toPinboardQueue : List (Attribute Msg) -> List (Html Msg) -> Html Msg
@@ -121,7 +139,7 @@ toPinboardQueue =
 
 pocketPath : String
 pocketPath =
-    "/queue/pocket"
+    "/" ++ baseUrl ++ "/queue/pocket"
 
 
 toPocketQueue : List (Attribute Msg) -> List (Html Msg) -> Html Msg
