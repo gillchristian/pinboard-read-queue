@@ -46,7 +46,7 @@ view model =
                     viewNotFount
     in
         div [ class "read-queue--app" ]
-            [ pageHero
+            [ pageHero model
             , page
             , pageFooter
             ]
@@ -195,8 +195,31 @@ itemView queue =
                 ]
 
 
-pageHero : Html Msg
-pageHero =
+appendClass : String -> String -> Bool -> Attribute Msg
+appendClass toAppend base shouldAppend =
+    if shouldAppend then
+        class <| base ++ " " ++ toAppend
+    else
+        class base
+
+
+appendIsActive : String -> Bool -> Attribute Msg
+appendIsActive =
+    appendClass "is-active"
+
+
+navbarActive : Route -> Route -> Attribute Msg
+navbarActive desired current =
+    appendIsActive "navbar-item" <| desired == current
+
+
+liActive : Route -> Route -> Attribute Msg
+liActive desired current =
+    appendIsActive "" <| desired == current
+
+
+pageHero : Model -> Html Msg
+pageHero model =
     section [ class "read-queue--hero hero is-primary is-bold" ]
         [ div [ class "hero-head" ]
             [ nav [ class "navbar" ]
@@ -206,11 +229,11 @@ pageHero =
                         ]
                     , div [ class "navbar-menu" ]
                         [ div [ class "navbar-end" ]
-                            [ toHome [ class "navbar-item is-active" ]
+                            [ toHome [ navbarActive HomeRoute model.route ]
                                 [ text "Home" ]
-                            , toAbout [ class "navbar-item" ]
+                            , toAbout [ navbarActive AboutRoute model.route ]
                                 [ text "About" ]
-                            , toSettings [ class "navbar-item" ]
+                            , toSettings [ navbarActive SettingsRoute model.route ]
                                 [ text "Settings" ]
                             ]
                         ]
@@ -227,19 +250,19 @@ pageHero =
             [ nav [ class "tabs is-centered is-medium is-boxed" ]
                 [ div [ class "container" ]
                     [ ul []
-                        [ li [ class "is-active" ]
+                        [ li [ liActive HomeRoute model.route ]
                             [ toHome []
                                 [ span [ class "icon is-small" ] [ i [ class "far fa-hand-point-down" ] [] ]
                                 , span [] [ text "Local" ]
                                 ]
                             ]
-                        , li []
+                        , li [ liActive PinboardRoute model.route ]
                             [ toPinboardQueue []
                                 [ span [ class "icon is-small" ] [ i [ class "fa fa-thumbtack" ] [] ]
                                 , span [] [ text "Pinboard" ]
                                 ]
                             ]
-                        , li []
+                        , li [ liActive PocketRoute model.route ]
                             [ toPocketQueue []
                                 [ span [ class "icon is-small" ] [ i [ class "fab fa-get-pocket" ] [] ]
                                 , span [] [ text "Pocket" ]

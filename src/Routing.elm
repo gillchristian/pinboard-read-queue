@@ -2,13 +2,15 @@ module Routing
     exposing
         ( matchers
         , parseLocation
+        , onLinkClick
+        , link
+          -- paths
         , homePath
         , aboutPath
         , settingsPath
         , pinboardPath
         , pocketPath
-        , onLinkClick
-        , link
+          -- go to path
         , toHome
         , toAbout
         , toSettings
@@ -86,6 +88,11 @@ onLinkClick message =
 link : String -> List (Attribute Msg) -> List (Html Msg) -> Html Msg
 link path attributes children =
     a ([ href path, onLinkClick (ChangeLocation path) ] ++ attributes) children
+
+
+isHome : Route -> Bool
+isHome route =
+    route == HomeRoute
 
 
 

@@ -54,13 +54,8 @@ update msg model =
 
 
 handleLoad : Model -> Maybe Queue -> Model
-handleLoad model maybeQueue =
-    case maybeQueue of
-        Just queue ->
-            { model | queue = queue }
-
-        Nothing ->
-            model
+handleLoad model =
+    Maybe.withDefault model << Maybe.map (\queue -> { model | queue = queue })
 
 
 addItem : Model -> Model

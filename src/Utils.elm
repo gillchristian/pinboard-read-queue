@@ -16,13 +16,8 @@ sendCmd msg =
 
 
 isNothing : Maybe a -> Bool
-isNothing maybe =
-    case maybe of
-        Just _ ->
-            False
-
-        Nothing ->
-            True
+isNothing =
+    Maybe.withDefault True << Maybe.map (\_ -> False)
 
 
 updateItemText : String -> Item -> Item
@@ -105,5 +100,5 @@ truncate max str =
 
 
 cleanLink : String -> String
-cleanLink link =
-    truncate 30 <| removeProtocol <| removeWWW <| removeQuery <| removeTrailingSlash link
+cleanLink =
+    truncate 30 << removeProtocol << removeWWW << removeQuery << removeTrailingSlash
